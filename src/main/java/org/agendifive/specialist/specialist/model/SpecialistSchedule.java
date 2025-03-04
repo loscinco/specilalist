@@ -11,7 +11,7 @@ public class SpecialistSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "specialist_id", nullable = false)
     private Specialist specialist;
 
