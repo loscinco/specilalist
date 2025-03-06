@@ -48,11 +48,15 @@ public class SpecialistService implements SpecialistInterface {
             specialist.setCreatedAt(LocalDateTime.now());
 
             if (request.getSchedules() != null) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                String startTime = request.getSchedules().getStartTime();
+                String endTime = request.getSchedules().getEndTime();
+                DateTimeFormatter formatter = startTime.length() == 5 ? DateTimeFormatter.ofPattern("HH:mm") : DateTimeFormatter.ofPattern("HH:mm:ss");
+                DateTimeFormatter formatter2 = endTime.length() == 5 ? DateTimeFormatter.ofPattern("HH:mm") : DateTimeFormatter.ofPattern("HH:mm:ss");
                 SpecialistSchedule schedule = new SpecialistSchedule();
                 schedule.setDayOfWeek(request.getSchedules().getDayOfWeek());
-                schedule.setStartTime(LocalTime.parse(request.getSchedules().getStartTime(), formatter));
-                schedule.setEndTime(LocalTime.parse(request.getSchedules().getEndTime(), formatter));
+                schedule.setStartTime(LocalTime.parse(startTime, formatter));
+                schedule.setEndTime(LocalTime.parse(startTime, formatter2));
+                schedule.setSpecialist(specialist);
                 specialist.setSpecialistSchedule(schedule);
                 specialistRepository.save(specialist);
 
@@ -119,10 +123,11 @@ public class SpecialistService implements SpecialistInterface {
             String startTime = request.getSchedules().getStartTime();
             String endTime = request.getSchedules().getEndTime();
                 // Validación de dayOfWeek: solo números 1-7 permitidos, separados por comas opcionalmente
-                if (dayOfWeek == null || !Pattern.matches("^[1-7](,[1-7])*$", dayOfWeek)) {
-                    errors.append("dia de la semana debe estar entre  1 y 7, opcional separado por comas. ");
-                }
-                // Validación de startTime y endTime entre 00:00:00 y 24:00:00
+            if (dayOfWeek == null || !Pattern.matches("^[1-7](-[1-7])?(,[1-7](-[1-7])?)*$", dayOfWeek)) {
+                errors.append("El día de la semana debe estar entre 1 y 7, opcionalmente separados por comas o en rangos con guion.");
+            }
+
+            // Validación de startTime y endTime entre 00:00:00 y 24:00:00
                 if (startTime == null) {
                    String errors_time =parseTime(startTime);
                     if(errors_time!= null){
