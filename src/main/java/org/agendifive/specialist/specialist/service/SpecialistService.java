@@ -76,6 +76,7 @@ public class SpecialistService implements SpecialistInterface {
         return specialists.stream()
                 .map(specialist -> {
                     SpecialistDTO dto = new SpecialistDTO();
+                    dto.setId(specialist.getId());
                     dto.setFirstName(specialist.getFirstName());
                     dto.setLastName(specialist.getLastName());
                     dto.setEmail(specialist.getEmail());
