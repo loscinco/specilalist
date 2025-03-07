@@ -58,6 +58,7 @@ public class SpecialistService implements SpecialistInterface {
                 schedule.setEndTime(LocalTime.parse(endTime, formatter2));
                 schedule.setSpecialist(specialist);
                 specialist.setSpecialistSchedule(schedule);
+                specialist.setStatus('A');
                 specialistRepository.save(specialist);
 
 
