@@ -55,7 +55,7 @@ public class SpecialistService implements SpecialistInterface {
                 SpecialistSchedule schedule = new SpecialistSchedule();
                 schedule.setDayOfWeek(request.getSchedules().getDayOfWeek());
                 schedule.setStartTime(LocalTime.parse(startTime, formatter));
-                schedule.setEndTime(LocalTime.parse(startTime, formatter2));
+                schedule.setEndTime(LocalTime.parse(endTime, formatter2));
                 schedule.setSpecialist(specialist);
                 specialist.setSpecialistSchedule(schedule);
                 specialistRepository.save(specialist);
