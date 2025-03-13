@@ -7,7 +7,7 @@ public class SpecialistRequest {
     private String email;
     private String phone;
     private Long establishmentId;
-    private char status;
+    private String status;
     private SpecialistScheduleRequest schedules;
 
     // Getters y setters
@@ -47,10 +47,10 @@ public class SpecialistRequest {
     public void setEstablishmentId(Long establishmentId) {
         this.establishmentId = establishmentId;
     }
-    public char getStatus() {
+    public String getStatus() {
         return status;
     }
-    public void setStatus(char status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

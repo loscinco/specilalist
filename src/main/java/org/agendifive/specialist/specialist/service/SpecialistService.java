@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 @Service
@@ -18,6 +19,8 @@ public class SpecialistService implements SpecialistInterface {
 
     @Autowired
     private SpecialistRepository specialistRepository;
+    @Autowired
+    private SpecialistAvailability specialistAvailability;
     @Override
     public ResponseSpecialist getSpecialisActive(Long establishmentId) {
         List<Specialist> specialistList = specialistRepository.findActiveSpecialistsByEstablishment(establishmentId);
@@ -58,7 +61,7 @@ public class SpecialistService implements SpecialistInterface {
                 schedule.setEndTime(LocalTime.parse(endTime, formatter2));
                 schedule.setSpecialist(specialist);
                 specialist.setSpecialistSchedule(schedule);
-                specialist.setStatus('A');
+                specialist.setStatus("A");
                 specialistRepository.save(specialist);
 
 
@@ -70,6 +73,56 @@ public class SpecialistService implements SpecialistInterface {
         responseSpecialist.setMessage(errors);
         return responseSpecialist;
 
+    }
+
+    @Override
+    @Transactional
+    public ResponseSpecialist getSpecialistByIdService(Long id, Long establishmentId) {
+        ResponseSpecialist responseSpecialist = new ResponseSpecialist();
+        responseSpecialist.setMessage("no se encuentran especialistas para el servicio y el establecimiento");
+        responseSpecialist.setSuccess(false);
+        List<Specialist> specialists= specialistRepository.findActiveSpecialistsByServiceId(id);
+        if(specialists.size() > 0){
+            List<SpecialistDTO> specialistDTOList = specialists.stream()
+                    .filter(specialist -> "A".equals(specialist.getStatus()) && establishmentId.equals(specialist.getEstablishmentId()))
+                    .map(specialist -> new SpecialistDTO(
+                            specialist.getId(),
+                            specialist.getFirstName(),
+                            specialist.getLastName(),
+                            specialist.getEmail(),
+                            specialist.getPhone(),
+                            specialist.getSpecialistSchedule().getDayOfWeek(),
+                            specialist.getSpecialistSchedule().getStartTime(),
+                            specialist.getSpecialistSchedule().getEndTime()
+                    ))
+                    .collect(Collectors.toList());
+            if(specialistDTOList.size()>0){
+                responseSpecialist.setMessage("se obtuvieron los especialistas con exito");
+                responseSpecialist.setSuccess(true);
+                responseSpecialist.setData(specialistDTOList);
+            }
+
+        }
+
+        return responseSpecialist;
+    }
+
+    @Override
+    public ResponseSpecialist getSspecialistAvailabilityById(Long idspecialist,int serviceDuration,String date) {
+        ResponseSpecialist response = new ResponseSpecialist();
+        response.setSuccess(false);
+        response.setMessage("No se encontro disponibilidad");
+        Specialist specialist = specialistRepository.findActiveSpecialistsById(idspecialist);
+        if(specialist != null){
+            List<AvailabilityDto> availabilityDtos = specialistAvailability.getAvailabilitySpecialist(specialist,serviceDuration,date);
+            if(availabilityDtos.size() > 0){
+                response.setSuccess(true);
+                response.setMessage("se encontro disponibilidad");
+                response.setAvailability(availabilityDtos);
+            }
+        }
+
+        return response;
     }
 
 
@@ -166,4 +219,7 @@ public class SpecialistService implements SpecialistInterface {
             return "Error: El formato de la hora es incorrecto. Debe ser HH:mm:ss";
         }
     }
+
+
+
 }

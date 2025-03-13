@@ -7,6 +7,8 @@ public class ResponseSpecialist {
     private String message;
     private List<SpecialistDTO> data;
 
+    private List<AvailabilityDto> availability;
+
     // Constructor completo
     public ResponseSpecialist(boolean success, String message, List<SpecialistDTO> data) {
         this.success = success;
@@ -41,5 +43,13 @@ public class ResponseSpecialist {
 
     public void setData(List<SpecialistDTO> data) {
         this.data = data;
+    }
+
+    public List<AvailabilityDto> getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(List<AvailabilityDto> availability) {
+        this.availability = availability;
     }
 }

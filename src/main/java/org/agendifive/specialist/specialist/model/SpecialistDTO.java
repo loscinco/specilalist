@@ -14,6 +14,22 @@ public class SpecialistDTO {
     private LocalTime startTime;
     private LocalTime endTime;
 
+    public SpecialistDTO(Long id, String firstName, String lastName, String email,
+                         String phone, String dayOfWeek, LocalTime startTime, LocalTime endTime) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.dayOfWeek = dayOfWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    // Constructor vacío
+    public SpecialistDTO() {
+    }
+
     // Getters y Setters para los nuevos campos
     public String getDayOfWeek() {
         return dayOfWeek;

@@ -3,6 +3,7 @@ package org.agendifive.specialist.specialist.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,7 +32,7 @@ public class Specialist {
     private Long establishmentId;
 
     @Column(nullable = false, length = 1)
-    private char status;
+    private String status;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -39,12 +40,22 @@ public class Specialist {
     @OneToOne(mappedBy = "specialist", cascade = CascadeType.ALL, orphanRemoval = true)
     private SpecialistSchedule specialistSchedule;
 
+    @ManyToMany
+    @JoinTable(
+            name = "specialist_services",
+            joinColumns = @JoinColumn(name = "specialist_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    private List<Service> services = new ArrayList<>();
+
+
     // Constructor por defecto
     public Specialist() {
         // Constructor por defecto
     }
 
     // Getters y setters
+
 
     public Long getId() {
         return id;
@@ -102,11 +113,11 @@ public class Specialist {
         this.establishmentId = establishmentId;
     }
 
-    public char getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(char status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -125,4 +136,14 @@ public class Specialist {
     public void setSpecialistSchedule(SpecialistSchedule specialistSchedule) {
         this.specialistSchedule = specialistSchedule;
     }
+
+    public List<Service> getServices() {
+        return services;
+    }
+
+    public void setServices(List<Service> services) {
+        this.services = services;
+    }
+
+
 }

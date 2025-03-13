@@ -95,7 +95,7 @@ class SpecialistServiceTest {
         request.setEmail("john.doe@example.com");
         request.setPhone("5511234");
         request.setEstablishmentId(1L);
-        request.setStatus('A');
+        request.setStatus("A");
 
         SpecialistScheduleRequest scheduleRequest = new SpecialistScheduleRequest();
         scheduleRequest.setDayOfWeek("1"); // Lunes
@@ -127,7 +127,7 @@ class SpecialistServiceTest {
         request.setEmail("john.doe@example.com");
         request.setPhone("555-1234");
         request.setEstablishmentId(1L);
-        request.setStatus('A');
+        request.setStatus("A");
 
         // Llamar al método
         ResponseSpecialist response = specialistService.createSpecialist(request);

@@ -12,17 +12,18 @@ public class SpecialistSchedule {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "specialist_id", nullable = false)
+    @JoinColumn(name = "specialist_id", nullable = false, unique = true)
     private Specialist specialist;
 
-    @Column(name = "day_of_week", nullable = false, length = 10) // Usando String para almacenar rangos
-    private String dayOfWeek; // Cambiado a String para almacenar valores como '1-5'
+    @Column(name = "day_of_week", nullable = false, length = 10)
+    private String dayOfWeek; // Puede ser '1-5', 'Lunes-Viernes', etc.
 
     @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
+
 
     public SpecialistSchedule() {
         // Constructor por defecto

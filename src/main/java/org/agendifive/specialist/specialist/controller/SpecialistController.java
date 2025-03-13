@@ -35,4 +35,22 @@ public class SpecialistController {
     public ResponseSpecialist createSpecialist(@RequestBody SpecialistRequest request) {
         return specialistInterface.createSpecialist(request);
     }
+
+    @GetMapping("specialistbyid/{idservice}/{establishmentId}")
+    @Operation(
+            summary = "Obtener especialistas activos por servicio",
+            description = "Retorna una lista de especialistas activos según el ID del servicio y el establishmentId."
+    )
+    public ResponseSpecialist getSpecialistById(@PathVariable Long idservice, @PathVariable Long establishmentId) {
+        return specialistInterface.getSpecialistByIdService(idservice, establishmentId);
+    }
+
+    @GetMapping("specialistAvailability/{idspecialist}/{serviceDuration}/{date}")
+    @Operation(
+            summary = "Obtener disponibilidad de especialista",
+            description = "Retorna disponibilidad de especialista consultado."
+    )
+    public ResponseSpecialist getSspecialistAvailabilityById(@PathVariable Long idspecialist,@PathVariable int serviceDuration,@PathVariable String date ) {
+        return specialistInterface.getSspecialistAvailabilityById(idspecialist,serviceDuration,date);
+    }
 }
