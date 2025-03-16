@@ -44,7 +44,7 @@ public class SpecialistController {
     public ResponseSpecialist getSpecialistById(@PathVariable Long idservice, @PathVariable Long establishmentId) {
         return specialistInterface.getSpecialistByIdService(idservice, establishmentId);
     }
-
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("specialistAvailability/{idspecialist}/{serviceDuration}/{date}")
     @Operation(
             summary = "Obtener disponibilidad de especialista",

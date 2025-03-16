@@ -111,15 +111,16 @@ public class SpecialistService implements SpecialistInterface {
     public ResponseSpecialist getSspecialistAvailabilityById(Long idspecialist,int serviceDuration,String date) {
         ResponseSpecialist response = new ResponseSpecialist();
         response.setSuccess(false);
-        response.setMessage("No se encontro disponibilidad");
+        response.setMessage("El especialista no cuenta con  disponibilidad para la fecha seleccionada, por favor seleccionar otra fecha u otro especialist");
         Specialist specialist = specialistRepository.findActiveSpecialistsById(idspecialist);
         if(specialist != null){
             List<AvailabilityDto> availabilityDtos = specialistAvailability.getAvailabilitySpecialist(specialist,serviceDuration,date);
-            if(availabilityDtos.size() > 0){
+            if(availabilityDtos != null){
                 response.setSuccess(true);
                 response.setMessage("se encontro disponibilidad");
                 response.setAvailability(availabilityDtos);
             }
+
         }
 
         return response;
