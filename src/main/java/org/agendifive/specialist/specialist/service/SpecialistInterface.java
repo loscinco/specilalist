@@ -11,4 +11,5 @@ public interface SpecialistInterface {
     ResponseSpecialist createSpecialist(SpecialistRequest request);
     ResponseSpecialist getSpecialistByIdService(Long id,Long establishmentId);
     ResponseSpecialist getSspecialistAvailabilityById(Long idspecialist,int serviceDuration,String date);
+    ResponseSpecialist fallbackResponse(Long idspecialist, int serviceDuration, String date, Throwable t);
 }

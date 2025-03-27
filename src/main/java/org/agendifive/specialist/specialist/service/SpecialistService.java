@@ -1,6 +1,7 @@
 package org.agendifive.specialist.specialist.service;
 
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.agendifive.specialist.specialist.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,7 +107,7 @@ public class SpecialistService implements SpecialistInterface {
 
         return responseSpecialist;
     }
-
+    @CircuitBreaker(name = "getSspecialistAvailabilityById", fallbackMethod = "fallbackResponse")
     @Override
     public ResponseSpecialist getSspecialistAvailabilityById(Long idspecialist,int serviceDuration,String date) {
         ResponseSpecialist response = new ResponseSpecialist();
@@ -125,6 +126,15 @@ public class SpecialistService implements SpecialistInterface {
 
         return response;
     }
+
+    @Override
+    public ResponseSpecialist fallbackResponse(Long idspecialist, int serviceDuration, String date, Throwable t) {
+        ResponseSpecialist response = new ResponseSpecialist();
+        response.setSuccess(false);
+        response.setMessage("Servicio no disponible en este momento. Intente más tarde.");
+        return response;
+    }
+
 
 
     private List<SpecialistDTO> convertToDtoList(List<Specialist> specialists) {

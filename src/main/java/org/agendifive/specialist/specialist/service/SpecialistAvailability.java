@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
 
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -21,7 +22,7 @@ public class SpecialistAvailability {
 
         if(specialist != null){
             //verifica q el dia este dentro del horario del specialist
-         boolean isTodayInDayOfWeek = isTodayInDayOfWeek(specialist.getSpecialistSchedule().getDayOfWeek());
+         boolean isTodayInDayOfWeek = isTodayInDayOfWeek(specialist.getSpecialistSchedule().getDayOfWeek(),date);
          if(isTodayInDayOfWeek){
              List<AvailabilityDto> availabilityDto = new ArrayList<>();
              List<AvailabilityDto> usedTimes = getScheduleBySpecialistAndDate(specialist.getId().intValue(),date);
@@ -33,15 +34,18 @@ public class SpecialistAvailability {
         return null;
     }
 
-    public boolean isTodayInDayOfWeek(String dayOfWeek) {
+    public boolean isTodayInDayOfWeek(String dayOfWeek, String date) {
         // Obtener el día de la semana actual (1 = lunes, 7 = domingo)
-        int today = LocalDate.now().getDayOfWeek().getValue();
+        LocalDate fecha = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+
+        DayOfWeek diaSemana = fecha.getDayOfWeek();
+        int numeroDia = diaSemana.getValue(); // 1 = Lunes, 7 = Domingo
 
         // Parsear el string day_of_week
         Set<Integer> validDays = parseDayOfWeek(dayOfWeek);
 
         // Verificar si el día actual está en la lista de días válidos
-        return validDays.contains(today);
+        return validDays.contains(numeroDia);
     }
 
     // Método para parsear day_of_week
@@ -75,8 +79,8 @@ public class SpecialistAvailability {
     public List<AvailabilityDto> getScheduleBySpecialistAndDate(Integer specialistId, String date) {
         RestTemplate restTemplate = new RestTemplate();
         List<LocalTime> hours = new ArrayList<>();
-        String url = "https://rcapruebas.unad.edu.co:8002/agendamiento-api/api/getschedulebyspecialistbydate/" + specialistId + "/" + date;
-        // String url = "http://localhost:8080/api/api/getschedulebyspecialistbydate/" + specialistId + "/" + date;
+        //String url = "https://rcapruebas.unad.edu.co:8002/agendamiento-api/api/getschedulebyspecialistbydate/" + specialistId + "/" + date;
+         String url = "http://localhost:8080/api/api/getschedulebyspecialistbydate/" + specialistId + "/" + date;
 
         ResponseEntity<BookingResponse> responseEntity = restTemplate.getForEntity(url, BookingResponse.class);
 

@@ -18,4 +18,14 @@ springdoc:
     enabled: true
   swagger-ui:
     enabled: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      myService:
+        failureRateThreshold: 50  # % de fallos antes de abrir el circuito
+        slowCallRateThreshold: 50 # % de llamadas lentas permitidas
+        waitDurationInOpenState: 5s  # Tiempo que el circuito se mantiene abierto antes de probar de nuevo
+        permittedNumberOfCallsInHalfOpenState: 3  # Llamadas de prueba en estado "Half-Open"
+        slidingWindowSize: 10  # Número de llamadas analizadas en la ventana deslizante
+        minimumNumberOfCalls: 5  # Mínimo de llamadas necesarias para evaluar el estado del circuito
 
