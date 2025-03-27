@@ -131,7 +131,7 @@ public class SpecialistService implements SpecialistInterface {
     public ResponseSpecialist fallbackResponse(Long idspecialist, int serviceDuration, String date, Throwable t) {
         ResponseSpecialist response = new ResponseSpecialist();
         response.setSuccess(false);
-        response.setMessage("Servicio no disponible en este momento. Intente más tarde.");
+        response.setMessage("Servicio no disponible en este momento, por favor Intente más tarde.");
         return response;
     }
 
